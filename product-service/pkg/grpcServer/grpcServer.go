@@ -48,20 +48,48 @@ func (p *PrGRPCServer) InsertProduct(ctx context.Context, req *api.InsertProduct
 
 // GetAllProduct ...
 func (p *PrGRPCServer) GetAllProduct(ctx context.Context, req *api.GetAllProductRequest) (*api.GetAllProductResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	result, err := p.db.GetAllProduct(ctx)
+	if err != nil {
+		return &api.GetAllProductResponse{
+			Product: nil,
+		}, err
+	}
 
+	// Преобразование типа []*Product в []*api.Product
+	var products []*api.Product
+	for _, prod := range result {
+		products = append(products, &api.Product{
+			Name:  prod.Name,
+			Price: prod.Price,
+		})
+	}
+	fmt.Println("Successfully selected from database")
+	return &api.GetAllProductResponse{
+		Product: products,
+	}, nil
 }
 
 // GetProduct ...
 func (p *PrGRPCServer) GetProduct(ctx context.Context, req *api.GetProductRequest) (*api.GetProductResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	product, err := p.db.GetProduct(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+	return &api.GetProductResponse{
+		Name:  product.Name,
+		Price: product.Price,
+	}, nil
 }
 
 // DeleteProduct ...
 func (p *PrGRPCServer) DeleteProduct(ctx context.Context, req *api.DeleteProductRequest) (*api.DeleteProductResponse, error) {
+	err := p.db.DeleteProduct(ctx, req.Id)
+	if err != nil {
+		return &api.DeleteProductResponse{
+			IsSuccessful: false,
+		}, err
+	}
 	return &api.DeleteProductResponse{
-		IsSuccessful: false,
+		IsSuccessful: true,
 	}, nil
 }
