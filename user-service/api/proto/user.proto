@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package User;
+
+option go_package = "user-service/pkg/api";
+
+service UserService {
+  rpc InsertUser (InsertUserRequest) returns (InsertUserResponse) {}
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {}
+  rpc UpdateUsername (UpdateUsernameRequest) returns (UpdateUsernameResponse) {}
+}
+
+message InsertUserRequest {
+  string name = 1;
+  int64 price = 2;
+}
+
+message InsertUserResponse {
+  oneof result {
+    User user = 1;
+    string isSuccessful = 2;
+  }
+}
+
+message DeleteUserRequest {
+  int32 id = 1;
+}
+
+message DeleteUserResponse {
+  bool isSuccessful = 1;
+}
+
+message UpdateUsernameRequest {
+  int64 id = 1;
+  string username = 2;
+}
+
+message UpdateUsernameResponse {
+  bool isSuccessful = 1;
+}
+
+message User {
+  string id = 1;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+}

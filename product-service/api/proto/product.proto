@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "product-service/pkg/api";
+
+service ProductService {
+  rpc GetProduct (GetProductRequest) returns (GetProductResponse) {}
+  rpc GetAllProduct (GetAllProductRequest) returns (GetAllProductResponse) {}
+  rpc InsertProduct (InsertProductRequest) returns (InsertProductResponse) {}
+  rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse) {}
+}
+
+message GetProductRequest {
+  int32 id = 1;
+}
+
+message GetProductResponse {
+  string name = 1;
+  int64 price = 2;
+}
+
+message GetAllProductRequest { }
+
+message GetAllProductResponse {
+  repeated Product product = 1;
+}
+
+message InsertProductRequest {
+  string name = 1;
+  int64 price = 2;
+}
+
+message InsertProductResponse {
+  oneof result {
+    Product product = 1;
+    string isSuccessful = 2;
+  }
+}
+
+message DeleteProductRequest {
+  int32 id = 1;
+}
+
+message DeleteProductResponse {
+  bool isSuccessful = 1;
+}
+
+message Product {
+  string name = 1;
+  int64 price = 2;
+}
