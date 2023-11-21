@@ -19,7 +19,6 @@ func main() {
 		log.Println("No .env file found")
 		panic(err)
 	}
-	// TODO change settings for DB
 	dsn := os.Getenv("PSQL_AUTH")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
