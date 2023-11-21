@@ -11,8 +11,7 @@ service UserService {
 }
 
 message InsertUserRequest {
-  string name = 1;
-  int64 price = 2;
+  User user = 1;
 }
 
 message InsertUserResponse {
@@ -40,7 +39,6 @@ message UpdateUsernameResponse {
 }
 
 message User {
-  string id = 1;
   string username = 2;
   string password = 3;
   string name = 4;

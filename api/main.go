@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	productpb "PR10_1/product-service/pkg/api"
+	userpb "PR10_1/user-service/pkg/api"
 )
 
 func main() {
@@ -31,6 +32,18 @@ func main() {
 		log.Fatalf("Failed to register product service handler: %v", err)
 	}
 
+	// Регистрация UserService
+	userEndpoint := "localhost:50052"
+	userConn, err := grpc.DialContext(ctx, userEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to dial product service: %v", err)
+	}
+	defer userConn.Close()
+
+	err = userpb.RegisterUserServiceHandler(ctx, mux, userConn)
+	if err != nil {
+		log.Fatalf("Failed to register user service handler: %v", err)
+	}
 	// Запуск API Gateway
 	gatewayAddr := ":8080"
 	log.Printf("Starting API Gateway on %s", gatewayAddr)
@@ -38,4 +51,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to start API Gateway: %v", err)
 	}
+
 }
